@@ -41,6 +41,8 @@ class SwiftStorage(Storage):
     temp_url_duration = setting('SWIFT_TEMP_URL_DURATION', 30*60)
     auth_token_duration = setting('SWIFT_AUTH_TOKEN_DURATION', 60*60*23)
     os_extra_options = setting('SWIFT_EXTRA_OPTIONS', {})
+    custom_ca = setting('SWIFT_CUSTOM_CA', None)
+    ssl_insecure = setting('SWIFT_SSL_INSECURE', False)
     _token_creation_time = 0
     _token = ''
     name_prefix = setting('SWIFT_NAME_PREFIX')
@@ -57,6 +59,8 @@ class SwiftStorage(Storage):
             auth_version=self.auth_version,
             os_options=dict({"tenant_name": self.tenant_name}.items() +
                             self.os_extra_options.items()),
+            cacert=self.custom_ca,
+            insecure=self.ssl_insecure
         )
         self.http_conn = swiftclient.http_connection(self.storage_url)
 
